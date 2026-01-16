@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marklog</title>
+  <link rel="stylesheet" href="newtab.css">
+</head>
+<body>
+  <!-- ===== 전체 컨테이너 ===== -->
+  <div id="app">
+    
+    <!-- ===== 상단 영역: 검색창 + 설정 버튼 ===== -->
+    <header class="header">
+      <!-- 검색창 (가운데 정렬) -->
+      <div class="search-container">
+        <input 
+          type="text" 
+          id="searchInput" 
+          class="search-input" 
+          placeholder="검색 (/ 키로 이동)"
+          autocomplete="off"
+        >
+        <span class="search-icon">🔍</span>
+        
+        <!-- 검색 결과 드롭다운 -->
+        <div id="searchResults" class="search-results hidden">
+          <!-- 검색 결과가 여기에 동적으로 추가됨 -->
+        </div>
+      </div>
+      
+      <!-- 설정 버튼 (오른쪽 끝) -->
+      <button id="settingsBtn" class="settings-btn" title="설정">
+        ⚙️
+      </button>
+    </header>
+    
+    <!-- ===== 즐겨찾기 영역 ===== -->
+    <section id="favoritesSection" class="favorites-section">
+      <div class="favorites-container">
+        <!-- 왼쪽 화살표 (9개 이상일 때만 표시) -->
+        <button id="favPrevBtn" class="nav-arrow nav-arrow-left hidden">◀</button>
+        
+        <!-- 즐겨찾기 아이템들 -->
+        <div id="favoritesGrid" class="favorites-grid">
+          <!-- 즐겨찾기 항목들이 여기에 동적으로 추가됨 -->
+        </div>
+        
+        <!-- 오른쪽 화살표 (9개 이상일 때만 표시) -->
+        <button id="favNextBtn" class="nav-arrow nav-arrow-right hidden">▶</button>
+      </div>
+      
+      <!-- 페이지 인디케이터 -->
+      <div id="favPageIndicator" class="page-indicator hidden"></div>
+    </section>
+    
+    <!-- ===== 북마크(폴더) 영역 ===== -->
+    <section class="bookmarks-section">
+      <div class="bookmarks-container">
+        <!-- 왼쪽 화살표 (9개 이상일 때만 표시) -->
+        <button id="folderPrevBtn" class="nav-arrow nav-arrow-left hidden">◀</button>
+        
+        <!-- 폴더 그리드 -->
+        <div id="foldersGrid" class="folders-grid">
+          <!-- 폴더들이 여기에 동적으로 추가됨 -->
+        </div>
+        
+        <!-- 오른쪽 화살표 (9개 이상일 때만 표시) -->
+        <button id="folderNextBtn" class="nav-arrow nav-arrow-right hidden">▶</button>
+      </div>
+      
+      <!-- 페이지 인디케이터 -->
+      <div id="folderPageIndicator" class="page-indicator hidden"></div>
+    </section>
+  </div>
+  
+  <!-- ===== 모달: 항목 추가/수정 ===== -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <h2 id="modalTitle">항목 추가</h2>
+      
+      <form id="modalForm">
+        <!-- 이모지 선택 (폴더용) -->
+        <div id="emojiField" class="form-field hidden">
+          <label for="emojiInput">이모지 (선택사항)</label>
+          <input type="text" id="emojiInput" maxlength="2" placeholder="📁">
+        </div>
+        
+        <!-- 이름 -->
+        <div class="form-field">
+          <label for="nameInput">이름 *</label>
+          <input type="text" id="nameInput" required placeholder="이름 입력">
+        </div>
+        
+        <!-- URL (사이트/즐겨찾기용) -->
+        <div id="urlField" class="form-field">
+          <label for="urlInput">URL *</label>
+          <input type="url" id="urlInput" placeholder="https://example.com">
+        </div>
+        
+        <!-- 메모 -->
+        <div id="memoField" class="form-field">
+          <label for="memoInput">메모 / 키워드</label>
+          <input type="text" id="memoInput" placeholder="검색용 키워드나 메모">
+        </div>
+        
+        <!-- 폴더 선택 (사이트 추가 시) -->
+        <div id="folderSelectField" class="form-field hidden">
+          <label for="folderSelect">폴더 선택</label>
+          <select id="folderSelect"></select>
+        </div>
+        
+        <!-- 버튼들 -->
+        <div class="modal-buttons">
+          <button type="button" id="modalCancelBtn" class="btn btn-secondary">취소</button>
+          <button type="button" id="modalDeleteBtn" class="btn btn-danger hidden">삭제</button>
+          <button type="submit" id="modalSaveBtn" class="btn btn-primary">저장</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- ===== 설정 패널 ===== -->
+  <div id="settingsPanel" class="settings-panel hidden">
+    <div class="settings-backdrop"></div>
+    <div class="settings-content">
+      <h2>설정</h2>
+      
+      <!-- 테마 -->
+      <div class="settings-item">
+        <label>테마</label>
+        <select id="themeSelect">
+          <option value="light">라이트 (밝은 화면)</option>
+          <option value="dark">다크 (어두운 화면)</option>
+        </select>
+      </div>
+      
+      <!-- 즐겨찾기 표시 -->
+      <div class="settings-item">
+        <label>즐겨찾기 영역</label>
+        <select id="showFavoritesSelect">
+          <option value="true">표시</option>
+          <option value="false">숨기기</option>
+        </select>
+      </div>
+      
+      <!-- 폴더 줄 수 -->
+      <div class="settings-item">
+        <label>폴더 줄 수</label>
+        <select id="folderRowsSelect">
+          <option value="1">1줄</option>
+          <option value="2">2줄</option>
+        </select>
+      </div>
+      
+      <!-- 동기화 버튼 -->
+      <div class="settings-item">
+        <label>데이터 동기화</label>
+        <button id="syncBtn" class="btn btn-primary">강제 동기화</button>
+      </div>
+      
+      <!-- 데이터 관리 -->
+      <div class="settings-item">
+        <label>데이터 관리</label>
+        <div class="btn-group">
+          <button id="exportBtn" class="btn btn-secondary">내보내기</button>
+          <button id="importBtn" class="btn btn-secondary">가져오기</button>
+        </div>
+        <input type="file" id="importFile" accept=".json" class="hidden">
+      </div>
+      
+      <!-- 닫기 버튼 -->
+      <button id="settingsCloseBtn" class="btn btn-secondary settings-close">닫기</button>
+    </div>
+  </div>
+  
+  <!-- ===== 알림 토스트 ===== -->
+  <div id="toast" class="toast hidden"></div>
+  
+  <!-- 스크립트 로드 -->
+  <script src="utils/storage.js"></script>
+  <script src="utils/search.js"></script>
+  <script src="utils/dragdrop.js"></script>
+  <script src="newtab.js"></script>
+</body>
+</html>

@@ -1,0 +1,841 @@
+/* ============================================
+   Marklog - 메인 스타일시트
+   ============================================ */
+
+/* === CSS 변수 (테마 색상) === */
+:root {
+  /* 라이트 테마 (기본) */
+  --bg-primary: #f5f7fa;
+  --bg-secondary: #ffffff;
+  --bg-hover: #e8ecf1;
+  --text-primary: #1a1a2e;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --border-color: #e2e8f0;
+  --accent-color: #4f46e5;
+  --accent-hover: #4338ca;
+  --danger-color: #ef4444;
+  --danger-hover: #dc2626;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* 다크 테마 */
+[data-theme="dark"] {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-hover: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --accent-color: #818cf8;
+  --accent-hover: #6366f1;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* === 기본 리셋 및 전역 스타일 === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* === 메인 컨테이너 === */
+#app {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 24px 40px;
+}
+
+/* ============================================
+   헤더 (검색창 + 설정)
+   ============================================ */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 32px;
+  padding: 0 60px; /* 설정 버튼 공간 확보 */
+}
+
+/* 검색 컨테이너 */
+.search-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 20px 14px 48px;
+  font-size: 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  pointer-events: none;
+}
+
+/* 검색 결과 드롭다운 */
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 8px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.15s ease;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover,
+.search-result-item.selected {
+  background-color: var(--bg-hover);
+}
+
+.search-result-item .favicon {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.search-result-item .info {
+  flex: 1;
+  min-width: 0;
+}
+
+.search-result-item .name {
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-result-item .url {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 설정 버튼 */
+.settings-btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.settings-btn:hover {
+  background-color: var(--bg-hover);
+  transform: translateY(-50%) rotate(30deg);
+}
+
+/* ============================================
+   즐겨찾기 영역
+   ============================================ */
+.favorites-section {
+  margin-bottom: 40px;
+  padding: 24px;
+  background-color: var(--bg-secondary);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.favorites-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.favorites-grid {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+/* 즐겨찾기 아이템 */
+.favorite-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+  position: relative;
+}
+
+.favorite-item:hover {
+  background-color: var(--bg-hover);
+  transform: translateY(-2px);
+}
+
+.favorite-item .favicon-container {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-primary);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.favorite-item .favicon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.favorite-item .name {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  max-width: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 즐겨찾기 추가 버튼 */
+.favorite-add {
+  border: 2px dashed var(--border-color);
+  background-color: transparent;
+}
+
+.favorite-add:hover {
+  border-color: var(--accent-color);
+  background-color: rgba(79, 70, 229, 0.05);
+}
+
+.favorite-add .add-icon {
+  font-size: 24px;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   북마크(폴더) 영역
+   ============================================ */
+.bookmarks-section {
+  padding: 24px 0;
+}
+
+.bookmarks-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* 폴더 그리드 - 4열 2행 */
+.folders-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  width: 100%;
+  max-width: 1400px;
+}
+
+/* 1줄 모드 */
+.folders-grid.single-row {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* 폴더 카드 */
+.folder-card {
+  background-color: var(--bg-secondary);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.folder-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* 폴더 헤더 */
+.folder-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  background-color: var(--bg-hover);
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  position: relative;
+}
+
+.folder-header:hover .folder-actions {
+  opacity: 1;
+}
+
+.folder-emoji {
+  font-size: 20px;
+}
+
+.folder-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+/* 폴더 액션 버튼 (편집/삭제) */
+.folder-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.folder-action-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.15s ease;
+}
+
+.folder-action-btn:hover {
+  background-color: var(--bg-secondary);
+}
+
+/* 폴더 내부 사이트 목록 */
+.folder-sites {
+  padding: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+/* 사이트 아이템 */
+.site-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.site-item:hover {
+  background-color: var(--bg-hover);
+}
+
+.site-item:hover .site-actions {
+  opacity: 1;
+}
+
+.site-item .favicon {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.site-item .site-name {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.site-item .site-url {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+/* 사이트 액션 버튼 */
+.site-actions {
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.site-action-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.15s ease;
+}
+
+.site-action-btn:hover {
+  background-color: var(--bg-secondary);
+}
+
+/* 사이트 추가 버튼 */
+.site-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  margin: 8px;
+  border: 1px dashed var(--border-color);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.site-add:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  background-color: rgba(79, 70, 229, 0.05);
+}
+
+/* 폴더 추가 카드 */
+.folder-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  border: 2px dashed var(--border-color);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: transparent;
+}
+
+.folder-add:hover {
+  border-color: var(--accent-color);
+  background-color: rgba(79, 70, 229, 0.03);
+}
+
+.folder-add .add-icon {
+  font-size: 32px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.folder-add .add-text {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   네비게이션 화살표
+   ============================================ */
+.nav-arrow {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.nav-arrow:hover {
+  background-color: var(--bg-hover);
+  color: var(--accent-color);
+}
+
+.nav-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* 페이지 인디케이터 */
+.page-indicator {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   모달
+   ============================================ */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 440px;
+  background-color: var(--bg-secondary);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-content h2 {
+  font-size: 20px;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+.form-field {
+  margin-bottom: 18px;
+}
+
+.form-field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.form-field input,
+.form-field select {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: border-color 0.2s ease;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+/* ============================================
+   설정 패널
+   ============================================ */
+.settings-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.settings-content {
+  position: relative;
+  width: 90%;
+  max-width: 400px;
+  background-color: var(--bg-secondary);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--shadow-lg);
+}
+
+.settings-content h2 {
+  font-size: 20px;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+.settings-item {
+  margin-bottom: 20px;
+}
+
+.settings-item label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.settings-item select,
+.settings-item input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.settings-close {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.btn-group {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-group .btn {
+  flex: 1;
+}
+
+/* ============================================
+   버튼 스타일
+   ============================================ */
+.btn {
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--border-color);
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: var(--danger-hover);
+}
+
+/* ============================================
+   토스트 알림
+   ============================================ */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 14px 24px;
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+  border-radius: 10px;
+  font-size: 14px;
+  box-shadow: var(--shadow-lg);
+  z-index: 2000;
+  animation: toastIn 0.3s ease;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ============================================
+   유틸리티 클래스
+   ============================================ */
+.hidden {
+  display: none !important;
+}
+
+/* 드래그 중인 아이템 */
+.dragging {
+  opacity: 0.5;
+}
+
+.drag-over {
+  border: 2px dashed var(--accent-color) !important;
+}
+
+/* 키보드 포커스 표시 */
+.keyboard-focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* 스크롤바 스타일 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-muted);
+}
+
+/* ============================================
+   반응형 (화면 크기에 따른 조정)
+   ============================================ */
+@media (max-width: 1200px) {
+  .folders-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .folders-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .favorites-grid {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  #app {
+    padding: 16px;
+  }
+  
+  .folders-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .search-container {
+    max-width: 100%;
+  }
+}
