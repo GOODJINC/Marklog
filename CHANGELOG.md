@@ -69,7 +69,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [1.1.0] - 예정
 - [ ] 방향키로 즐겨찾기/폴더/사이트 간 이동
 - [ ] 폴더 드래그앤드롭 순서 변경
-- [ ] 브라우저 기본 북마크 가져오기 기능
 
 ### [1.2.0] - 예정
 - [ ] 사용자 정의 배경 이미지/색상
@@ -79,5 +78,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## Links
-- **GitHub**: (저장소 URL 추가 예정)
-- **Issues**: (이슈 URL 추가 예정)
+- **GitHub**: https://github.com/GOODJINC/Marklog
+- **Issues**: https://github.com/GOODJINC/Marklog/issues
