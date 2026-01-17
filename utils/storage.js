@@ -10,6 +10,10 @@
    - saveData(): 데이터 저장하기
    - exportData(): JSON 파일로 내보내기
    - importData(): JSON 파일에서 가져오기
+   
+   [v1.1.0 추가]
+   - 배경 설정 (색상, 이미지, 그라데이션)
+   - 폴더별 색상 설정
 */
 
 // ===== 기본 데이터 구조 =====
@@ -19,7 +23,15 @@ const DEFAULT_DATA = {
   settings: {
     theme: 'light',           // 'light' 또는 'dark'
     showFavorites: true,      // 즐겨찾기 표시 여부
-    folderRows: 2             // 폴더 줄 수 (1 또는 2)
+    folderRows: 2,            // 폴더 줄 수 (1 또는 2)
+    // v1.1.0 추가: 배경 설정
+    background: {
+      type: 'color',          // 'color', 'gradient', 'image'
+      color: '',              // 단색 배경 (빈 값이면 테마 기본색)
+      gradient: '',           // 그라데이션 CSS
+      imageUrl: '',           // 이미지 URL
+      opacity: 1              // 배경 불투명도 (0~1)
+    }
   },
   
   // 즐겨찾기 목록
@@ -34,7 +46,14 @@ const SAMPLE_DATA = {
   settings: {
     theme: 'light',
     showFavorites: true,
-    folderRows: 2
+    folderRows: 2,
+    background: {
+      type: 'color',
+      color: '',
+      gradient: '',
+      imageUrl: '',
+      opacity: 1
+    }
   },
   
   favorites: [
@@ -48,6 +67,7 @@ const SAMPLE_DATA = {
       id: 'folder1',
       name: '포털',
       emoji: '🌐',
+      color: '',  // v1.1.0: 폴더 색상 (빈 값이면 기본색)
       sites: [
         { id: 'site1', name: '네이버', url: 'https://naver.com', memo: '국내 포털' },
         { id: 'site2', name: '다음', url: 'https://daum.net', memo: '카카오' },
@@ -58,6 +78,7 @@ const SAMPLE_DATA = {
       id: 'folder2',
       name: '소셜',
       emoji: '💬',
+      color: '',
       sites: [
         { id: 'site4', name: '인스타그램', url: 'https://instagram.com', memo: 'SNS' },
         { id: 'site5', name: '트위터', url: 'https://twitter.com', memo: 'X' },
@@ -68,6 +89,7 @@ const SAMPLE_DATA = {
       id: 'folder3',
       name: '쇼핑',
       emoji: '🛒',
+      color: '',
       sites: [
         { id: 'site7', name: '쿠팡', url: 'https://coupang.com', memo: '로켓배송' },
         { id: 'site8', name: '11번가', url: 'https://11st.co.kr', memo: 'SK' }
@@ -77,6 +99,7 @@ const SAMPLE_DATA = {
       id: 'folder4',
       name: '생산성',
       emoji: '📝',
+      color: '',
       sites: [
         { id: 'site9', name: '노션', url: 'https://notion.so', memo: '메모 협업' },
         { id: 'site10', name: '슬랙', url: 'https://slack.com', memo: '업무 채팅' }
@@ -85,29 +108,62 @@ const SAMPLE_DATA = {
   ]
 };
 
+// ===== 데이터 마이그레이션 =====
+// 이전 버전 데이터를 새 버전 구조로 변환
+function migrateData(data) {
+  // settings.background가 없으면 추가
+  if (!data.settings.background) {
+    data.settings.background = {
+      type: 'color',
+      color: '',
+      gradient: '',
+      imageUrl: '',
+      opacity: 1
+    };
+  }
+  
+  // 각 폴더에 color 필드가 없으면 추가
+  data.folders.forEach(folder => {
+    if (folder.color === undefined) {
+      folder.color = '';
+    }
+  });
+  
+  return data;
+}
+
 // ===== 데이터 불러오기 =====
 // 저장된 북마크 데이터를 불러옵니다
 async function loadData() {
   return new Promise((resolve) => {
     // chrome.storage가 있으면 크롬 확장 환경
     if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.sync) {
-      chrome.storage.sync.get(['linklogData'], (result) => {
-        if (result.linklogData) {
-          // 저장된 데이터가 있으면 반환
-          resolve(result.linklogData);
+      chrome.storage.sync.get(['marklogData'], (result) => {
+        if (result.marklogData) {
+          // 저장된 데이터가 있으면 마이그레이션 후 반환
+          resolve(migrateData(result.marklogData));
         } else {
-          // 처음 사용 시 샘플 데이터로 시작
-          saveData(SAMPLE_DATA);
-          resolve(SAMPLE_DATA);
+          // 이전 linklogData 확인 (이름 변경 호환성)
+          chrome.storage.sync.get(['linklogData'], (oldResult) => {
+            if (oldResult.linklogData) {
+              const migratedData = migrateData(oldResult.linklogData);
+              saveData(migratedData);
+              resolve(migratedData);
+            } else {
+              // 처음 사용 시 샘플 데이터로 시작
+              saveData(SAMPLE_DATA);
+              resolve(SAMPLE_DATA);
+            }
+          });
         }
       });
     } else {
       // 개발/테스트 환경에서는 localStorage 사용
-      const saved = localStorage.getItem('linklogData');
+      const saved = localStorage.getItem('marklogData') || localStorage.getItem('linklogData');
       if (saved) {
-        resolve(JSON.parse(saved));
+        resolve(migrateData(JSON.parse(saved)));
       } else {
-        localStorage.setItem('linklogData', JSON.stringify(SAMPLE_DATA));
+        localStorage.setItem('marklogData', JSON.stringify(SAMPLE_DATA));
         resolve(SAMPLE_DATA);
       }
     }
@@ -120,11 +176,11 @@ async function saveData(data) {
   return new Promise((resolve, reject) => {
     // chrome.storage가 있으면 동기화 저장소 사용
     if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.sync) {
-      chrome.storage.sync.set({ linklogData: data }, () => {
+      chrome.storage.sync.set({ marklogData: data }, () => {
         if (chrome.runtime.lastError) {
           // 용량 초과 시 local storage로 폴백
           console.warn('sync storage 용량 초과, local storage 사용');
-          chrome.storage.local.set({ linklogData: data }, () => {
+          chrome.storage.local.set({ marklogData: data }, () => {
             resolve();
           });
         } else {
@@ -133,7 +189,7 @@ async function saveData(data) {
       });
     } else {
       // 개발/테스트 환경
-      localStorage.setItem('linklogData', JSON.stringify(data));
+      localStorage.setItem('marklogData', JSON.stringify(data));
       resolve();
     }
   });
@@ -148,6 +204,14 @@ async function saveSettings(settings) {
   return data;
 }
 
+// ===== 배경 설정 저장 =====
+async function saveBackground(background) {
+  const data = await loadData();
+  data.settings.background = { ...data.settings.background, ...background };
+  await saveData(data);
+  return data;
+}
+
 // ===== 데이터 내보내기 (백업) =====
 // JSON 파일로 다운로드
 async function exportData() {
@@ -157,7 +221,7 @@ async function exportData() {
   
   const a = document.createElement('a');
   a.href = url;
-  a.download = `linklog-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  a.download = `marklog-backup-${new Date().toISOString().slice(0, 10)}.json`;
   a.click();
   
   URL.revokeObjectURL(url);
@@ -175,11 +239,13 @@ async function importData(file) {
         
         // 데이터 구조 검증
         if (!data.settings || !data.favorites || !data.folders) {
-          throw new Error('올바른 LinkLog 백업 파일이 아닙니다.');
+          throw new Error('올바른 Marklog 백업 파일이 아닙니다.');
         }
         
-        await saveData(data);
-        resolve(data);
+        // 마이그레이션 적용
+        const migratedData = migrateData(data);
+        await saveData(migratedData);
+        resolve(migratedData);
       } catch (error) {
         reject(new Error('파일 형식이 올바르지 않습니다.'));
       }
@@ -256,6 +322,7 @@ async function addFolder(folder) {
     id: generateId('folder'),
     name: folder.name,
     emoji: folder.emoji || '',
+    color: folder.color || '',  // v1.1.0: 폴더 색상
     sites: []
   };
   data.folders.push(newFolder);
