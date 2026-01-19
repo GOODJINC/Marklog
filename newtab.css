@@ -306,8 +306,8 @@ body.scroll-locked {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 240px;
-  max-height: 240px;
+  min-height: 280px;
+  max-height: 280px;
   border: 2px dashed var(--border-color);
   border-radius: 16px;
   cursor: pointer;
@@ -317,8 +317,8 @@ body.scroll-locked {
 
 /* 1줄 설정일 때 추가 버튼 높이도 증가 */
 .folders-grid.single-row .folder-add {
-  min-height: 360px;
-  max-height: 360px;
+  min-height: 480px;
+  max-height: 480px;
 }
 
 /* 자동 높이 모드일 때는 max-height 제한 없음 */

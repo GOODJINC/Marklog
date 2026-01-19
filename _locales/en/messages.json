@@ -1,0 +1,318 @@
+{
+  "extName": {
+    "message": "Marklog",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Bookmark dashboard at a glance - View folders and sites on wide screens at once",
+    "description": "Extension description"
+  },
+  "searchPlaceholder": {
+    "message": "Search sites...",
+    "description": "Search input placeholder"
+  },
+  "favorites": {
+    "message": "Favorites",
+    "description": "Favorites section title"
+  },
+  "addFavorite": {
+    "message": "Add Favorite",
+    "description": "Add favorite button"
+  },
+  "addFolder": {
+    "message": "Add Folder",
+    "description": "Add folder button"
+  },
+  "addSite": {
+    "message": "Add Site",
+    "description": "Add site button"
+  },
+  "edit": {
+    "message": "Edit",
+    "description": "Edit button"
+  },
+  "delete": {
+    "message": "Delete",
+    "description": "Delete button"
+  },
+  "save": {
+    "message": "Save",
+    "description": "Save button"
+  },
+  "cancel": {
+    "message": "Cancel",
+    "description": "Cancel button"
+  },
+  "close": {
+    "message": "Close",
+    "description": "Close button"
+  },
+  "settings": {
+    "message": "Settings",
+    "description": "Settings title"
+  },
+  "theme": {
+    "message": "Theme",
+    "description": "Theme setting"
+  },
+  "light": {
+    "message": "Light",
+    "description": "Light theme"
+  },
+  "dark": {
+    "message": "Dark",
+    "description": "Dark theme"
+  },
+  "showFavorites": {
+    "message": "Favorites Area",
+    "description": "Show favorites setting"
+  },
+  "show": {
+    "message": "Show",
+    "description": "Show option"
+  },
+  "hide": {
+    "message": "Hide",
+    "description": "Hide option"
+  },
+  "folderRows": {
+    "message": "Folder Rows",
+    "description": "Folder rows setting"
+  },
+  "oneRow": {
+    "message": "1 Row",
+    "description": "One row option"
+  },
+  "twoRows": {
+    "message": "2 Rows",
+    "description": "Two rows option"
+  },
+  "folderScrollMode": {
+    "message": "Folder Scroll Mode",
+    "description": "Folder scroll mode setting"
+  },
+  "fixedHeight": {
+    "message": "Fixed Height (Internal Scroll)",
+    "description": "Fixed height scroll mode"
+  },
+  "autoHeight": {
+    "message": "Auto Height (Page Scroll)",
+    "description": "Auto height scroll mode"
+  },
+  "background": {
+    "message": "Background",
+    "description": "Background setting"
+  },
+  "backgroundType": {
+    "message": "Background Type",
+    "description": "Background type setting"
+  },
+  "solidColor": {
+    "message": "Solid Color",
+    "description": "Solid color option"
+  },
+  "gradient": {
+    "message": "Gradient",
+    "description": "Gradient option"
+  },
+  "image": {
+    "message": "Image",
+    "description": "Image option"
+  },
+  "backgroundColor": {
+    "message": "Background Color",
+    "description": "Background color setting"
+  },
+  "gradientPreset": {
+    "message": "Gradient Preset",
+    "description": "Gradient preset setting"
+  },
+  "gradientCustom": {
+    "message": "Custom Gradient CSS",
+    "description": "Custom gradient CSS"
+  },
+  "backgroundImageUrl": {
+    "message": "Background Image URL",
+    "description": "Background image URL"
+  },
+  "cardOpacity": {
+    "message": "Card Opacity",
+    "description": "Card opacity setting"
+  },
+  "language": {
+    "message": "Language",
+    "description": "Language setting"
+  },
+  "languageAuto": {
+    "message": "Auto (Browser Language)",
+    "description": "Auto language option"
+  },
+  "languageEnglish": {
+    "message": "English",
+    "description": "English language option"
+  },
+  "languageKorean": {
+    "message": "한국어",
+    "description": "Korean language option"
+  },
+  "dataManagement": {
+    "message": "Data Management",
+    "description": "Data management section"
+  },
+  "forceSync": {
+    "message": "Force Sync",
+    "description": "Force sync button"
+  },
+  "exportData": {
+    "message": "Export Data",
+    "description": "Export data button"
+  },
+  "importData": {
+    "message": "Import Data",
+    "description": "Import data button"
+  },
+  "editFavorite": {
+    "message": "Edit Favorite",
+    "description": "Edit favorite modal title"
+  },
+  "addFavoriteTitle": {
+    "message": "Add Favorite",
+    "description": "Add favorite modal title"
+  },
+  "editFolder": {
+    "message": "Edit Folder",
+    "description": "Edit folder modal title"
+  },
+  "addFolderTitle": {
+    "message": "Add Folder",
+    "description": "Add folder modal title"
+  },
+  "editSite": {
+    "message": "Edit Site",
+    "description": "Edit site modal title"
+  },
+  "addSiteTitle": {
+    "message": "Add Site",
+    "description": "Add site modal title"
+  },
+  "siteName": {
+    "message": "Site Name",
+    "description": "Site name input label"
+  },
+  "siteUrl": {
+    "message": "URL",
+    "description": "URL input label"
+  },
+  "urlPlaceholder": {
+    "message": "example.com or https://example.com",
+    "description": "URL input placeholder"
+  },
+  "memo": {
+    "message": "Memo",
+    "description": "Memo input label"
+  },
+  "memoPlaceholder": {
+    "message": "Optional memo",
+    "description": "Memo input placeholder"
+  },
+  "folderName": {
+    "message": "Folder Name",
+    "description": "Folder name input label"
+  },
+  "folderEmoji": {
+    "message": "Emoji",
+    "description": "Folder emoji input label"
+  },
+  "folderColor": {
+    "message": "Folder Color",
+    "description": "Folder color input label"
+  },
+  "resetColor": {
+    "message": "Reset",
+    "description": "Reset color button"
+  },
+  "deleteConfirm": {
+    "message": "Are you sure you want to delete?",
+    "description": "Delete confirmation message"
+  },
+  "keyboardHint": {
+    "message": "↑↓←→ Move | Enter Open | Esc Exit",
+    "description": "Keyboard navigation hint"
+  },
+  "previousPage": {
+    "message": "Previous",
+    "description": "Previous page button"
+  },
+  "nextPage": {
+    "message": "Next",
+    "description": "Next page button"
+  },
+  "page": {
+    "message": "Page",
+    "description": "Page indicator"
+  },
+  "syncSuccess": {
+    "message": "Sync completed successfully",
+    "description": "Sync success message"
+  },
+  "exportSuccess": {
+    "message": "Data exported successfully",
+    "description": "Export success message"
+  },
+  "importSuccess": {
+    "message": "Data imported successfully",
+    "description": "Import success message"
+  },
+  "importError": {
+    "message": "Invalid file format",
+    "description": "Import error message"
+  },
+  "deleted": {
+    "message": "Deleted successfully",
+    "description": "Delete success message"
+  },
+  "nameRequired": {
+    "message": "Please enter a name",
+    "description": "Name required message"
+  },
+  "urlRequired": {
+    "message": "Please enter a URL",
+    "description": "URL required message"
+  },
+  "added": {
+    "message": "Added successfully",
+    "description": "Add success message"
+  },
+  "updated": {
+    "message": "Updated successfully",
+    "description": "Update success message"
+  },
+  "saveError": {
+    "message": "An error occurred while saving",
+    "description": "Save error message"
+  },
+  "settingsChanged": {
+    "message": "Settings changed",
+    "description": "Settings changed message"
+  },
+  "themeChanged": {
+    "message": "Theme changed",
+    "description": "Theme changed message"
+  },
+  "languageChanged": {
+    "message": "Language changed",
+    "description": "Language changed message"
+  },
+  "exportStarted": {
+    "message": "Backup file will be downloaded",
+    "description": "Export started message"
+  },
+  "bgColorPlaceholder": {
+    "message": "Leave blank for default",
+    "description": "Background color placeholder"
+  },
+  "bgImagePlaceholder": {
+    "message": "example.com/image.jpg or https://example.com/image.jpg",
+    "description": "Background image URL placeholder"
+  }
+}

@@ -25,6 +25,7 @@ const DEFAULT_DATA = {
     showFavorites: true,      // 즐겨찾기 표시 여부
     folderRows: 2,            // 폴더 줄 수 (1 또는 2)
     folderScrollMode: 'fixed', // 폴더 스크롤 모드 ('fixed': 고정 높이, 'auto': 자동 높이)
+    language: 'auto',         // 언어 설정 ('auto', 'en', 'ko')
     // v1.1.0 추가: 배경 설정
     background: {
       type: 'color',          // 'color', 'gradient', 'image'
@@ -49,6 +50,7 @@ const SAMPLE_DATA = {
     showFavorites: true,
     folderRows: 2,
     folderScrollMode: 'fixed',
+    language: 'auto',
     background: {
       type: 'color',
       color: '',
@@ -59,54 +61,56 @@ const SAMPLE_DATA = {
   },
   
   favorites: [
-    { id: 'fav1', name: '네이버', url: 'https://naver.com', memo: '포털 검색' },
-    { id: 'fav2', name: '구글', url: 'https://google.com', memo: '검색엔진' },
-    { id: 'fav3', name: '유튜브', url: 'https://youtube.com', memo: '동영상' }
+    { id: 'fav1', name: 'Google', url: 'https://google.com', memo: 'Search Engine' },
+    { id: 'fav2', name: 'YouTube', url: 'https://youtube.com', memo: 'Video Platform' },
+    { id: 'fav3', name: 'Naver', url: 'https://naver.com', memo: 'Portal Search' }
   ],
   
   folders: [
     {
       id: 'folder1',
-      name: '포털',
+      name: 'Search',
       emoji: '🌐',
       color: '',  // v1.1.0: 폴더 색상 (빈 값이면 기본색)
       sites: [
-        { id: 'site1', name: '네이버', url: 'https://naver.com', memo: '국내 포털' },
-        { id: 'site2', name: '다음', url: 'https://daum.net', memo: '카카오' },
-        { id: 'site3', name: '구글', url: 'https://google.com', memo: '검색' }
+        { id: 'site1', name: 'Google', url: 'https://google.com', memo: 'Search Engine' },
+        { id: 'site2', name: 'Duckduckgo', url: 'https://duckduckgo.com/', memo: 'Privacy Search' },
+        { id: 'site3', name: 'Naver', url: 'https://naver.com', memo: 'Portal Search' }
       ]
     },
     {
       id: 'folder2',
-      name: '소셜',
+      name: 'SNS',
       emoji: '💬',
       color: '',
       sites: [
-        { id: 'site4', name: '인스타그램', url: 'https://instagram.com', memo: 'SNS' },
-        { id: 'site5', name: '트위터', url: 'https://twitter.com', memo: 'X' },
-        { id: 'site6', name: '페이스북', url: 'https://facebook.com', memo: 'Meta' }
+        { id: 'site4', name: 'Instagram', url: 'https://instagram.com', memo: 'SNS' },
+        { id: 'site5', name: 'X', url: 'https://x.com/', memo: 'Twitter' },
+        { id: 'site6', name: 'Facebook', url: 'https://facebook.com', memo: 'Meta' }
       ]
     },
     {
       id: 'folder3',
-      name: '쇼핑',
-      emoji: '🛒',
-      color: '',
-      sites: [
-        { id: 'site7', name: '쿠팡', url: 'https://coupang.com', memo: '로켓배송' },
-        { id: 'site8', name: '11번가', url: 'https://11st.co.kr', memo: 'SK' }
-      ]
-    },
-    {
-      id: 'folder4',
-      name: '생산성',
+      name: 'Productivity',
       emoji: '📝',
       color: '',
       sites: [
-        { id: 'site9', name: '노션', url: 'https://notion.so', memo: '메모 협업' },
-        { id: 'site10', name: '슬랙', url: 'https://slack.com', memo: '업무 채팅' }
+        { id: 'site7', name: 'Evernote', url: 'https://evernote.com/', memo: 'Note Taking' },
+        { id: 'site8', name: 'Notion', url: 'https://notion.so', memo: 'Note & Collaboration' },
+        { id: 'site9', name: 'Slack', url: 'https://slack.com', memo: 'Workplace Chat' }
       ]
-    }
+    },
+    {
+      id: 'folder5',
+      name: 'AI Tools',
+      emoji: '🤖',
+      color: '',
+      sites: [
+        { id: 'site10', name: 'ChatGPT', url: 'https://chatgpt.com', memo: 'Conversational AI Chatbot' },
+        { id: 'site11', name: 'Gemini', url: 'https://gemini.google.com', memo: 'Multimodal AI Chatbot' },
+        { id: 'site12', name: 'Claude', url: 'https://claude.ai', memo: 'Assistant AI Chatbot' }
+     ]
+}
   ]
 };
 
@@ -127,6 +131,11 @@ function migrateData(data) {
   // folderScrollMode가 없으면 추가
   if (!data.settings.folderScrollMode) {
     data.settings.folderScrollMode = 'fixed';
+  }
+
+  // language가 없으면 추가
+  if (!data.settings.language) {
+    data.settings.language = 'auto';
   }
 
   // 각 폴더에 color 필드가 없으면 추가

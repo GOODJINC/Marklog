@@ -1,0 +1,318 @@
+{
+  "extName": {
+    "message": "Marklog",
+    "description": "확장 프로그램 이름"
+  },
+  "extDescription": {
+    "message": "한눈에 보는 북마크 대시보드 - 폴더와 사이트를 와이드 화면에서 한번에 확인",
+    "description": "확장 프로그램 설명"
+  },
+  "searchPlaceholder": {
+    "message": "사이트 검색...",
+    "description": "검색 입력 플레이스홀더"
+  },
+  "favorites": {
+    "message": "즐겨찾기",
+    "description": "즐겨찾기 섹션 제목"
+  },
+  "addFavorite": {
+    "message": "즐겨찾기 추가",
+    "description": "즐겨찾기 추가 버튼"
+  },
+  "addFolder": {
+    "message": "폴더 추가",
+    "description": "폴더 추가 버튼"
+  },
+  "addSite": {
+    "message": "사이트 추가",
+    "description": "사이트 추가 버튼"
+  },
+  "edit": {
+    "message": "수정",
+    "description": "수정 버튼"
+  },
+  "delete": {
+    "message": "삭제",
+    "description": "삭제 버튼"
+  },
+  "save": {
+    "message": "저장",
+    "description": "저장 버튼"
+  },
+  "cancel": {
+    "message": "취소",
+    "description": "취소 버튼"
+  },
+  "close": {
+    "message": "닫기",
+    "description": "닫기 버튼"
+  },
+  "settings": {
+    "message": "설정",
+    "description": "설정 제목"
+  },
+  "theme": {
+    "message": "테마",
+    "description": "테마 설정"
+  },
+  "light": {
+    "message": "라이트",
+    "description": "라이트 테마"
+  },
+  "dark": {
+    "message": "다크",
+    "description": "다크 테마"
+  },
+  "showFavorites": {
+    "message": "즐겨찾기 영역",
+    "description": "즐겨찾기 표시 설정"
+  },
+  "show": {
+    "message": "표시",
+    "description": "표시 옵션"
+  },
+  "hide": {
+    "message": "숨기기",
+    "description": "숨기기 옵션"
+  },
+  "folderRows": {
+    "message": "폴더 줄 수",
+    "description": "폴더 줄 수 설정"
+  },
+  "oneRow": {
+    "message": "1줄",
+    "description": "1줄 옵션"
+  },
+  "twoRows": {
+    "message": "2줄",
+    "description": "2줄 옵션"
+  },
+  "folderScrollMode": {
+    "message": "폴더 스크롤 모드",
+    "description": "폴더 스크롤 모드 설정"
+  },
+  "fixedHeight": {
+    "message": "고정 높이 (폴더 내부 스크롤)",
+    "description": "고정 높이 스크롤 모드"
+  },
+  "autoHeight": {
+    "message": "자동 높이 (페이지 스크롤)",
+    "description": "자동 높이 스크롤 모드"
+  },
+  "background": {
+    "message": "배경",
+    "description": "배경 설정"
+  },
+  "backgroundType": {
+    "message": "배경 종류",
+    "description": "배경 종류 설정"
+  },
+  "solidColor": {
+    "message": "단색",
+    "description": "단색 옵션"
+  },
+  "gradient": {
+    "message": "그라데이션",
+    "description": "그라데이션 옵션"
+  },
+  "image": {
+    "message": "이미지",
+    "description": "이미지 옵션"
+  },
+  "backgroundColor": {
+    "message": "배경 색상",
+    "description": "배경 색상 설정"
+  },
+  "gradientPreset": {
+    "message": "그라데이션 프리셋",
+    "description": "그라데이션 프리셋 설정"
+  },
+  "gradientCustom": {
+    "message": "커스텀 그라데이션 CSS",
+    "description": "커스텀 그라데이션 CSS"
+  },
+  "backgroundImageUrl": {
+    "message": "배경 이미지 URL",
+    "description": "배경 이미지 URL"
+  },
+  "cardOpacity": {
+    "message": "카드 불투명도",
+    "description": "카드 불투명도 설정"
+  },
+  "language": {
+    "message": "언어",
+    "description": "언어 설정"
+  },
+  "languageAuto": {
+    "message": "자동 (브라우저 언어)",
+    "description": "자동 언어 옵션"
+  },
+  "languageEnglish": {
+    "message": "English",
+    "description": "영어 언어 옵션"
+  },
+  "languageKorean": {
+    "message": "한국어",
+    "description": "한국어 언어 옵션"
+  },
+  "dataManagement": {
+    "message": "데이터 관리",
+    "description": "데이터 관리 섹션"
+  },
+  "forceSync": {
+    "message": "강제 동기화",
+    "description": "강제 동기화 버튼"
+  },
+  "exportData": {
+    "message": "데이터 내보내기",
+    "description": "데이터 내보내기 버튼"
+  },
+  "importData": {
+    "message": "데이터 가져오기",
+    "description": "데이터 가져오기 버튼"
+  },
+  "editFavorite": {
+    "message": "즐겨찾기 수정",
+    "description": "즐겨찾기 수정 모달 제목"
+  },
+  "addFavoriteTitle": {
+    "message": "즐겨찾기 추가",
+    "description": "즐겨찾기 추가 모달 제목"
+  },
+  "editFolder": {
+    "message": "폴더 수정",
+    "description": "폴더 수정 모달 제목"
+  },
+  "addFolderTitle": {
+    "message": "폴더 추가",
+    "description": "폴더 추가 모달 제목"
+  },
+  "editSite": {
+    "message": "사이트 수정",
+    "description": "사이트 수정 모달 제목"
+  },
+  "addSiteTitle": {
+    "message": "사이트 추가",
+    "description": "사이트 추가 모달 제목"
+  },
+  "siteName": {
+    "message": "사이트 이름",
+    "description": "사이트 이름 입력 레이블"
+  },
+  "siteUrl": {
+    "message": "URL",
+    "description": "URL 입력 레이블"
+  },
+  "urlPlaceholder": {
+    "message": "example.com 또는 https://example.com",
+    "description": "URL 입력 플레이스홀더"
+  },
+  "memo": {
+    "message": "메모",
+    "description": "메모 입력 레이블"
+  },
+  "memoPlaceholder": {
+    "message": "선택사항",
+    "description": "메모 입력 플레이스홀더"
+  },
+  "folderName": {
+    "message": "폴더 이름",
+    "description": "폴더 이름 입력 레이블"
+  },
+  "folderEmoji": {
+    "message": "이모지",
+    "description": "폴더 이모지 입력 레이블"
+  },
+  "folderColor": {
+    "message": "폴더 색상",
+    "description": "폴더 색상 입력 레이블"
+  },
+  "resetColor": {
+    "message": "초기화",
+    "description": "색상 초기화 버튼"
+  },
+  "deleteConfirm": {
+    "message": "정말 삭제하시겠습니까?",
+    "description": "삭제 확인 메시지"
+  },
+  "keyboardHint": {
+    "message": "↑↓←→ 이동 | Enter 열기 | Esc 종료",
+    "description": "키보드 네비게이션 힌트"
+  },
+  "previousPage": {
+    "message": "이전",
+    "description": "이전 페이지 버튼"
+  },
+  "nextPage": {
+    "message": "다음",
+    "description": "다음 페이지 버튼"
+  },
+  "page": {
+    "message": "페이지",
+    "description": "페이지 표시"
+  },
+  "syncSuccess": {
+    "message": "동기화가 완료되었습니다",
+    "description": "동기화 성공 메시지"
+  },
+  "exportSuccess": {
+    "message": "데이터를 내보냈습니다",
+    "description": "내보내기 성공 메시지"
+  },
+  "importSuccess": {
+    "message": "데이터를 가져왔습니다",
+    "description": "가져오기 성공 메시지"
+  },
+  "importError": {
+    "message": "잘못된 파일 형식입니다",
+    "description": "가져오기 오류 메시지"
+  },
+  "deleted": {
+    "message": "삭제되었습니다",
+    "description": "삭제 성공 메시지"
+  },
+  "nameRequired": {
+    "message": "이름을 입력해주세요",
+    "description": "이름 필수 메시지"
+  },
+  "urlRequired": {
+    "message": "URL을 입력해주세요",
+    "description": "URL 필수 메시지"
+  },
+  "added": {
+    "message": "추가되었습니다",
+    "description": "추가 성공 메시지"
+  },
+  "updated": {
+    "message": "수정되었습니다",
+    "description": "수정 성공 메시지"
+  },
+  "saveError": {
+    "message": "저장 중 오류가 발생했습니다",
+    "description": "저장 오류 메시지"
+  },
+  "settingsChanged": {
+    "message": "설정이 변경되었습니다",
+    "description": "설정 변경 메시지"
+  },
+  "themeChanged": {
+    "message": "테마가 변경되었습니다",
+    "description": "테마 변경 메시지"
+  },
+  "languageChanged": {
+    "message": "언어가 변경되었습니다",
+    "description": "언어 변경 메시지"
+  },
+  "exportStarted": {
+    "message": "백업 파일이 다운로드됩니다",
+    "description": "내보내기 시작 메시지"
+  },
+  "bgColorPlaceholder": {
+    "message": "기본값 사용시 빈칸",
+    "description": "배경 색상 플레이스홀더"
+  },
+  "bgImagePlaceholder": {
+    "message": "example.com/image.jpg 또는 https://example.com/image.jpg",
+    "description": "배경 이미지 URL 플레이스홀더"
+  }
+}

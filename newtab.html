@@ -20,7 +20,7 @@
             type="text"
             id="searchInput"
             class="search-input"
-            placeholder="검색 (/ 키로 이동)"
+            data-i18n-placeholder="searchPlaceholder"
             autocomplete="off"
           />
           <span class="search-icon">🔍</span>
@@ -32,7 +32,7 @@
         </div>
 
         <!-- 설정 버튼 (오른쪽 끝) -->
-        <button id="settingsBtn" class="settings-btn" title="설정">⚙️</button>
+        <button id="settingsBtn" class="settings-btn" data-i18n-title="settings">⚙️</button>
       </header>
 
       <!-- ===== 즐겨찾기 영역 ===== -->
@@ -302,6 +302,16 @@
           </select>
         </div>
 
+        <!-- 언어 설정 -->
+        <div class="settings-item">
+          <label>언어 / Language</label>
+          <select id="languageSelect">
+            <option value="auto">자동 (브라우저 언어) / Auto</option>
+            <option value="en">English</option>
+            <option value="ko">한국어</option>
+          </select>
+        </div>
+
         <!-- 동기화 버튼 -->
         <div class="settings-item">
           <label>데이터 동기화</label>
@@ -331,6 +341,7 @@
     <div id="toast" class="toast hidden"></div>
 
     <!-- 스크립트 로드 -->
+    <script src="utils/i18n.js"></script>
     <script src="utils/storage.js"></script>
     <script src="utils/search.js"></script>
     <script src="utils/dragdrop.js"></script>

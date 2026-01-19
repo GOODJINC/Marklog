@@ -41,19 +41,188 @@ let keyboardCurrentFolderId = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
   appData = await loadData();
+  await initI18n();
   applyTheme(appData.settings.theme);
   applyBackground(appData.settings.background);
   applyFolderScrollMode(appData.settings.folderScrollMode || 'fixed');
   renderAll();
   setupEventListeners();
   initDragDrop();
-  console.log('Marklog v1.1.0 초기화 완료');
+  console.log('Marklog v1.2.0 초기화 완료');
 });
 
 function renderAll() {
   renderFavorites(appData);
   renderFolders(appData);
   updateFavoritesVisibility();
+  updateUIText();
+}
+
+// Update all UI text with translations
+function updateUIText() {
+  // Search placeholder
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) searchInput.placeholder = t('searchPlaceholder', '사이트 검색...');
+
+  // Settings button
+  const settingsBtn = document.getElementById('settingsBtn');
+  if (settingsBtn) settingsBtn.title = t('settings', '설정');
+
+  // Modal labels (will be updated when modal opens)
+  // Settings panel labels
+  updateSettingsPanelText();
+
+  // Keyboard hint - Split into multiple spans for proper layout
+  const keyboardHint = document.getElementById('keyboardHint');
+  if (keyboardHint && keyboardHint.children.length === 3) {
+    const parts = t('keyboardHint', '↑↓←→ 이동 | Enter 열기 | Esc 종료').split(' | ');
+    if (parts.length === 3) {
+      keyboardHint.children[0].textContent = parts[0];
+      keyboardHint.children[1].textContent = parts[1];
+      keyboardHint.children[2].textContent = parts[2];
+    }
+  }
+}
+
+function updateSettingsPanelText() {
+  try {
+    // Settings panel header
+    const settingsHeader = document.querySelector('.settings-header h2');
+    if (settingsHeader) settingsHeader.textContent = t('settings', '설정');
+
+    // Update labels by finding parent settings-item and targeting specific selects
+    const themeItem = document.getElementById('themeSelect')?.closest('.settings-item');
+    if (themeItem) {
+      const label = themeItem.querySelector('label');
+      if (label) label.textContent = t('theme', '테마');
+    }
+
+    const bgTypeItem = document.getElementById('bgTypeSelect')?.closest('.settings-item');
+    if (bgTypeItem) {
+      const label = bgTypeItem.querySelector('label');
+      if (label) label.textContent = t('backgroundType', '배경 종류');
+    }
+
+    const bgColorField = document.getElementById('bgColorField');
+    if (bgColorField) {
+      const label = bgColorField.querySelector('label');
+      if (label) label.textContent = t('backgroundColor', '배경 색상');
+    }
+
+    const bgGradientField = document.getElementById('bgGradientField');
+    if (bgGradientField) {
+      const label = bgGradientField.querySelector('label');
+      if (label) label.textContent = t('gradientCustom', '그라데이션 (CSS)');
+    }
+
+    const bgImageField = document.getElementById('bgImageField');
+    if (bgImageField) {
+      const label = bgImageField.querySelector('label');
+      if (label) label.textContent = t('backgroundImageUrl', '이미지 URL');
+    }
+
+    const bgOpacityField = document.getElementById('bgOpacityField');
+    if (bgOpacityField) {
+      const label = bgOpacityField.querySelector('label');
+      const opacityValue = document.getElementById('opacityValue');
+      if (label && opacityValue) {
+        const value = opacityValue.textContent;
+        label.innerHTML = `${t('cardOpacity', '카드 불투명도')}: <span id="opacityValue">${value}</span>`;
+      }
+    }
+
+    const showFavItem = document.getElementById('showFavoritesSelect')?.closest('.settings-item');
+    if (showFavItem) {
+      const label = showFavItem.querySelector('label');
+      if (label) label.textContent = t('showFavorites', '즐겨찾기 영역');
+    }
+
+    const folderRowsItem = document.getElementById('folderRowsSelect')?.closest('.settings-item');
+    if (folderRowsItem) {
+      const label = folderRowsItem.querySelector('label');
+      if (label) label.textContent = t('folderRows', '폴더 줄 수');
+    }
+
+    const folderScrollItem = document.getElementById('folderScrollModeSelect')?.closest('.settings-item');
+    if (folderScrollItem) {
+      const label = folderScrollItem.querySelector('label');
+      if (label) label.textContent = t('folderScrollMode', '폴더 스크롤 모드');
+    }
+
+    const syncItem = document.getElementById('syncBtn')?.closest('.settings-item');
+    if (syncItem) {
+      const label = syncItem.querySelector('label');
+      if (label) label.textContent = t('dataManagement', '데이터 관리');
+    }
+
+    const exportItem = document.getElementById('exportBtn')?.closest('.settings-item');
+    if (exportItem) {
+      const label = exportItem.querySelector('label');
+      if (label) label.textContent = t('dataManagement', '데이터 관리');
+    }
+  } catch (error) {
+    console.error('Error updating settings panel text:', error);
+  }
+
+  // Update input placeholders
+  const bgColorText = document.getElementById('bgColorText');
+  if (bgColorText) bgColorText.placeholder = t('bgColorPlaceholder', '기본값 사용시 빈칸');
+
+  const bgImageInput = document.getElementById('bgImageInput');
+  if (bgImageInput) bgImageInput.placeholder = t('bgImagePlaceholder', 'example.com/image.jpg 또는 https://example.com/image.jpg');
+
+  // Select options
+  const themeSelect = document.getElementById('themeSelect');
+  if (themeSelect && themeSelect.options.length >= 2) {
+    themeSelect.options[0].textContent = t('light', '라이트');
+    themeSelect.options[1].textContent = t('dark', '다크');
+  }
+
+  const bgTypeSelect = document.getElementById('bgTypeSelect');
+  if (bgTypeSelect && bgTypeSelect.options.length >= 3) {
+    bgTypeSelect.options[0].textContent = t('solidColor', '단색');
+    bgTypeSelect.options[1].textContent = t('gradient', '그라데이션');
+    bgTypeSelect.options[2].textContent = t('image', '이미지 URL');
+  }
+
+  const showFavoritesSelect = document.getElementById('showFavoritesSelect');
+  if (showFavoritesSelect && showFavoritesSelect.options.length >= 2) {
+    showFavoritesSelect.options[0].textContent = t('show', '표시');
+    showFavoritesSelect.options[1].textContent = t('hide', '숨기기');
+  }
+
+  const folderRowsSelect = document.getElementById('folderRowsSelect');
+  if (folderRowsSelect && folderRowsSelect.options.length >= 2) {
+    folderRowsSelect.options[0].textContent = t('oneRow', '1줄');
+    folderRowsSelect.options[1].textContent = t('twoRows', '2줄');
+  }
+
+  const folderScrollModeSelect = document.getElementById('folderScrollModeSelect');
+  if (folderScrollModeSelect && folderScrollModeSelect.options.length >= 2) {
+    folderScrollModeSelect.options[0].textContent = t('fixedHeight', '고정 높이 (폴더 내부 스크롤)');
+    folderScrollModeSelect.options[1].textContent = t('autoHeight', '자동 높이 (전체 스크롤)');
+  }
+
+  // Buttons
+  const syncBtn = document.getElementById('syncBtn');
+  if (syncBtn) syncBtn.textContent = t('forceSync', '강제 동기화');
+
+  const exportBtn = document.getElementById('exportBtn');
+  if (exportBtn) exportBtn.textContent = t('exportData', '내보내기');
+
+  const importBtn = document.getElementById('importBtn');
+  if (importBtn) importBtn.textContent = t('importData', '가져오기');
+
+  // Gradient preset buttons
+  const gradientPresets = document.querySelectorAll('.gradient-preset');
+  if (gradientPresets.length >= 5) {
+    // Keep Korean names for gradient presets as they are color names
+    // These don't need translation
+  }
+
+  // Close button
+  const closeBtn = document.getElementById('settingsCloseBtn');
+  if (closeBtn) closeBtn.setAttribute('aria-label', t('close', '닫기'));
 }
 
 // ============================================
@@ -93,7 +262,7 @@ function renderFavorites(data) {
   if (currentFavoritePage === addButtonPage) {
     const addBtn = document.createElement('div');
     addBtn.className = 'favorite-item favorite-add';
-    addBtn.innerHTML = '<div class="favicon-container"><span class="add-icon">+</span></div><span class="name">추가</span>';
+    addBtn.innerHTML = `<div class="favicon-container"><span class="add-icon">+</span></div><span class="name">${t('addFavorite', '추가')}</span>`;
     addBtn.addEventListener('click', () => openModal('add', 'favorite'));
     grid.appendChild(addBtn);
   }
@@ -105,7 +274,7 @@ function renderFavorites(data) {
   if (needsPagination) {
     prevBtn.disabled = currentFavoritePage === 0;
     nextBtn.disabled = currentFavoritePage >= totalPages - 1;
-    pageIndicator.textContent = `${currentFavoritePage + 1} / ${totalPages}`;
+    pageIndicator.textContent = `${t('page', '페이지')} ${currentFavoritePage + 1} / ${totalPages}`;
   }
 }
 
@@ -167,7 +336,7 @@ function renderFolders(data) {
   if (currentFolderPage === addButtonPage) {
     const addCard = document.createElement('div');
     addCard.className = 'folder-card folder-add';
-    addCard.innerHTML = '<span class="add-icon">+</span><span class="add-text">폴더 추가</span>';
+    addCard.innerHTML = `<span class="add-icon">+</span><span class="add-text">${t('addFolder', '폴더 추가')}</span>`;
     addCard.addEventListener('click', () => openModal('add', 'folder'));
     grid.appendChild(addCard);
   }
@@ -179,7 +348,7 @@ function renderFolders(data) {
   if (needsPagination) {
     prevBtn.disabled = currentFolderPage === 0;
     nextBtn.disabled = currentFolderPage >= totalPages - 1;
-    pageIndicator.textContent = `${currentFolderPage + 1} / ${totalPages}`;
+    pageIndicator.textContent = `${t('page', '페이지')} ${currentFolderPage + 1} / ${totalPages}`;
   }
 }
 
@@ -235,7 +404,7 @@ function createFolderElement(folder) {
   
   const addSiteBtn = document.createElement('div');
   addSiteBtn.className = 'site-add';
-  addSiteBtn.innerHTML = '<span>+ 사이트 추가</span>';
+  addSiteBtn.innerHTML = `<span>+ ${t('addSite', '사이트 추가')}</span>`;
   addSiteBtn.addEventListener('click', () => {
     currentFolderId = folder.id;
     openModal('add', 'site');
@@ -424,7 +593,7 @@ function setupModalEvents() {
     appData = await loadData();
     renderAll();
     closeModal();
-    showToast('삭제되었습니다');
+    showToast(t('deleted', '삭제되었습니다'));
   });
   
   form.addEventListener('submit', async (e) => { e.preventDefault(); await saveModalData(); });
@@ -462,9 +631,9 @@ function openModal(mode, type, item = null) {
   const deleteBtn = document.getElementById('modalDeleteBtn');
   const folderSelectField = document.getElementById('folderSelectField');
   
-  title.textContent = mode === 'add' 
-    ? (type === 'favorite' ? '즐겨찾기 추가' : type === 'folder' ? '폴더 추가' : '사이트 추가')
-    : (type === 'favorite' ? '즐겨찾기 수정' : type === 'folder' ? '폴더 수정' : '사이트 수정');
+  title.textContent = mode === 'add'
+    ? (type === 'favorite' ? t('addFavoriteTitle', '즐겨찾기 추가') : type === 'folder' ? t('addFolderTitle', '폴더 추가') : t('addSiteTitle', '사이트 추가'))
+    : (type === 'favorite' ? t('editFavorite', '즐겨찾기 수정') : type === 'folder' ? t('editFolder', '폴더 수정') : t('editSite', '사이트 수정'));
   
   emojiField.classList.toggle('hidden', type !== 'folder');
   colorField.classList.toggle('hidden', type !== 'folder');
@@ -481,8 +650,64 @@ function openModal(mode, type, item = null) {
   document.getElementById('colorInput').value = item?.color || '#4f46e5';
   document.getElementById('urlInput').required = type !== 'folder';
   
+  // Update modal labels with translations
+  updateModalLabels(type);
+
   modal.classList.remove('hidden');
   document.getElementById('nameInput').focus();
+}
+
+function updateModalLabels(type) {
+  // Update form field labels
+  const emojiLabel = document.querySelector('#emojiField label');
+  if (emojiLabel) emojiLabel.textContent = t('folderEmoji', '이모지 (선택사항)');
+
+  const nameLabel = document.querySelector('label[for="nameInput"]');
+  if (nameLabel) {
+    if (type === 'folder') {
+      nameLabel.textContent = t('folderName', '폴더 이름') + ' *';
+    } else {
+      nameLabel.textContent = t('siteName', '사이트 이름') + ' *';
+    }
+  }
+
+  const urlLabel = document.querySelector('#urlField label');
+  if (urlLabel) urlLabel.textContent = t('siteUrl', 'URL') + ' *';
+
+  const memoLabel = document.querySelector('#memoField label');
+  if (memoLabel) memoLabel.textContent = t('memo', '메모 / 키워드');
+
+  const colorLabel = document.querySelector('#colorField label');
+  if (colorLabel) colorLabel.textContent = t('folderColor', '폴더 색상 (선택사항)');
+
+  // Update input placeholders
+  const emojiInput = document.getElementById('emojiInput');
+  if (emojiInput) emojiInput.placeholder = '📁';
+
+  const nameInput = document.getElementById('nameInput');
+  if (nameInput) nameInput.placeholder = type === 'folder' ? t('folderName', '폴더 이름') : t('siteName', '사이트 이름');
+
+  const urlInput = document.getElementById('urlInput');
+  if (urlInput) urlInput.placeholder = t('urlPlaceholder', 'example.com 또는 https://example.com');
+
+  const memoInput = document.getElementById('memoInput');
+  if (memoInput) memoInput.placeholder = t('memoPlaceholder', '선택사항');
+
+  const colorTextInput = document.getElementById('colorTextInput');
+  if (colorTextInput) colorTextInput.placeholder = '#4f46e5';
+
+  // Update buttons
+  const cancelBtn = document.getElementById('modalCancelBtn');
+  if (cancelBtn) cancelBtn.textContent = t('cancel', '취소');
+
+  const deleteBtn = document.getElementById('modalDeleteBtn');
+  if (deleteBtn) deleteBtn.textContent = t('delete', '삭제');
+
+  const saveBtn = document.getElementById('modalSaveBtn');
+  if (saveBtn) saveBtn.textContent = t('save', '저장');
+
+  const colorClearBtn = document.getElementById('colorClearBtn');
+  if (colorClearBtn) colorClearBtn.textContent = t('resetColor', '초기화');
 }
 
 function closeModal() {
@@ -500,8 +725,8 @@ async function saveModalData() {
   const memo = document.getElementById('memoInput').value.trim();
   const color = document.getElementById('colorTextInput').value.trim();
 
-  if (!name) { showToast('이름을 입력해주세요'); return; }
-  if (modalType !== 'folder' && !url) { showToast('URL을 입력해주세요'); return; }
+  if (!name) { showToast(t('nameRequired', '이름을 입력해주세요')); return; }
+  if (modalType !== 'folder' && !url) { showToast(t('urlRequired', 'URL을 입력해주세요')); return; }
 
   // URL에 프로토콜이 없으면 https:// 자동 추가
   if (url && modalType !== 'folder') {
@@ -522,9 +747,9 @@ async function saveModalData() {
     appData = await loadData();
     renderAll();
     closeModal();
-    showToast(modalMode === 'add' ? '추가되었습니다' : '수정되었습니다');
+    showToast(modalMode === 'add' ? t('added', '추가되었습니다') : t('updated', '수정되었습니다'));
   } catch (error) {
-    showToast('저장 중 오류가 발생했습니다');
+    showToast(t('saveError', '저장 중 오류가 발생했습니다'));
     console.error(error);
   }
 }
@@ -554,7 +779,7 @@ function setupSettingsEvents() {
     const theme = e.target.value;
     applyTheme(theme);
     appData = await saveSettings({ theme });
-    showToast('테마가 변경되었습니다');
+    showToast(t('themeChanged', '테마가 변경되었습니다'));
   });
   
   // 배경 설정 이벤트 (v1.1.0)
@@ -600,38 +825,46 @@ function setupSettingsEvents() {
     const showFavorites = e.target.value === 'true';
     appData = await saveSettings({ showFavorites });
     updateFavoritesVisibility();
-    showToast('설정이 변경되었습니다');
+    showToast(t('settingsChanged', '설정이 변경되었습니다'));
   });
-  
+
   document.getElementById('folderRowsSelect').addEventListener('change', async (e) => {
     const folderRows = parseInt(e.target.value);
     appData = await saveSettings({ folderRows });
     currentFolderPage = 0;
     renderFolders(appData);
-    showToast('설정이 변경되었습니다');
+    showToast(t('settingsChanged', '설정이 변경되었습니다'));
   });
 
   document.getElementById('folderScrollModeSelect').addEventListener('change', async (e) => {
     const folderScrollMode = e.target.value;
     appData = await saveSettings({ folderScrollMode });
     applyFolderScrollMode(folderScrollMode);
-    showToast('설정이 변경되었습니다');
+    showToast(t('settingsChanged', '설정이 변경되었습니다'));
+  });
+
+  document.getElementById('languageSelect').addEventListener('change', async (e) => {
+    const language = e.target.value;
+    appData = await saveSettings({ language });
+    await changeLanguage(language);
+    renderAll(); // Re-render UI with new language
+    showToast(t('languageChanged', '언어가 변경되었습니다'));
   });
 
   document.getElementById('syncBtn').addEventListener('click', async () => {
     await forceSync();
-    showToast('동기화 완료');
+    showToast(t('syncSuccess', '동기화 완료'));
   });
-  
+
   document.getElementById('exportBtn').addEventListener('click', () => {
     exportData();
-    showToast('백업 파일이 다운로드됩니다');
+    showToast(t('exportStarted', '백업 파일이 다운로드됩니다'));
   });
-  
+
   document.getElementById('importBtn').addEventListener('click', () => {
     document.getElementById('importFile').click();
   });
-  
+
   document.getElementById('importFile').addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -641,9 +874,9 @@ function setupSettingsEvents() {
         applyBackground(appData.settings.background);
         renderAll();
         updateSettingsUI();
-        showToast('데이터를 불러왔습니다');
+        showToast(t('importSuccess', '데이터를 불러왔습니다'));
       } catch (error) {
-        showToast(error.message);
+        showToast(t('importError', error.message));
       }
     }
     e.target.value = '';
@@ -675,6 +908,7 @@ async function applyAndSaveBackground() {
 
 function openSettings() {
   updateSettingsUI();
+  updateSettingsPanelText();
   document.getElementById('settingsPanel').classList.remove('hidden');
 }
 
@@ -687,6 +921,7 @@ function updateSettingsUI() {
   document.getElementById('showFavoritesSelect').value = String(appData.settings.showFavorites);
   document.getElementById('folderRowsSelect').value = String(appData.settings.folderRows);
   document.getElementById('folderScrollModeSelect').value = appData.settings.folderScrollMode || 'fixed';
+  document.getElementById('languageSelect').value = appData.settings.language || 'auto';
 
   // 배경 설정 UI (v1.1.0)
   const bg = appData.settings.background || {};
