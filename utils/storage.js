@@ -24,6 +24,7 @@ const DEFAULT_DATA = {
     theme: 'light',           // 'light' 또는 'dark'
     showFavorites: true,      // 즐겨찾기 표시 여부
     folderRows: 2,            // 폴더 줄 수 (1 또는 2)
+    folderScrollMode: 'fixed', // 폴더 스크롤 모드 ('fixed': 고정 높이, 'auto': 자동 높이)
     // v1.1.0 추가: 배경 설정
     background: {
       type: 'color',          // 'color', 'gradient', 'image'
@@ -47,6 +48,7 @@ const SAMPLE_DATA = {
     theme: 'light',
     showFavorites: true,
     folderRows: 2,
+    folderScrollMode: 'fixed',
     background: {
       type: 'color',
       color: '',
@@ -121,14 +123,19 @@ function migrateData(data) {
       opacity: 1
     };
   }
-  
+
+  // folderScrollMode가 없으면 추가
+  if (!data.settings.folderScrollMode) {
+    data.settings.folderScrollMode = 'fixed';
+  }
+
   // 각 폴더에 color 필드가 없으면 추가
   data.folders.forEach(folder => {
     if (folder.color === undefined) {
       folder.color = '';
     }
   });
-  
+
   return data;
 }
 

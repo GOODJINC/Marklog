@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   appData = await loadData();
   applyTheme(appData.settings.theme);
   applyBackground(appData.settings.background);
+  applyFolderScrollMode(appData.settings.folderScrollMode || 'fixed');
   renderAll();
   setupEventListeners();
   initDragDrop();
@@ -64,35 +65,43 @@ function renderFavorites(data) {
   const prevBtn = document.getElementById('favPrevBtn');
   const nextBtn = document.getElementById('favNextBtn');
   const pageIndicator = document.getElementById('favPageIndicator');
-  
+
   if (!grid) return;
   grid.innerHTML = '';
-  
+
+  // 즐겨찾기 추가 버튼을 하나의 슬롯으로 계산 (실제 즐겨찾기 + 추가 버튼)
+  const totalSlots = data.favorites.length + 1;
+  const totalPages = Math.ceil(totalSlots / FAVORITES_PER_PAGE);
+  const needsPagination = totalSlots > FAVORITES_PER_PAGE;
+
   const startIndex = currentFavoritePage * FAVORITES_PER_PAGE;
   const endIndex = startIndex + FAVORITES_PER_PAGE;
-  const pageItems = data.favorites.slice(startIndex, endIndex);
-  
+
+  // 현재 페이지에 표시할 즐겨찾기들
+  const pageItems = data.favorites.slice(startIndex, Math.min(endIndex, data.favorites.length));
+
   pageItems.forEach((favorite, index) => {
     const item = createFavoriteElement(favorite);
     item.dataset.index = startIndex + index;
     grid.appendChild(item);
   });
-  
-  if (pageItems.length < FAVORITES_PER_PAGE) {
+
+  // 즐겨찾기 추가 버튼: 현재 페이지에 슬롯이 남아있거나 마지막 페이지인 경우 표시
+  const addButtonIndex = data.favorites.length;
+  const addButtonPage = Math.floor(addButtonIndex / FAVORITES_PER_PAGE);
+
+  if (currentFavoritePage === addButtonPage) {
     const addBtn = document.createElement('div');
     addBtn.className = 'favorite-item favorite-add';
     addBtn.innerHTML = '<div class="favicon-container"><span class="add-icon">+</span></div><span class="name">추가</span>';
     addBtn.addEventListener('click', () => openModal('add', 'favorite'));
     grid.appendChild(addBtn);
   }
-  
-  const totalPages = Math.ceil(data.favorites.length / FAVORITES_PER_PAGE);
-  const needsPagination = data.favorites.length > FAVORITES_PER_PAGE;
-  
+
   prevBtn.classList.toggle('hidden', !needsPagination);
   nextBtn.classList.toggle('hidden', !needsPagination);
   pageIndicator.classList.toggle('hidden', !needsPagination);
-  
+
   if (needsPagination) {
     prevBtn.disabled = currentFavoritePage === 0;
     nextBtn.disabled = currentFavoritePage >= totalPages - 1;
@@ -125,38 +134,48 @@ function renderFolders(data) {
   const prevBtn = document.getElementById('folderPrevBtn');
   const nextBtn = document.getElementById('folderNextBtn');
   const pageIndicator = document.getElementById('folderPageIndicator');
-  
+
   if (!grid) return;
   grid.innerHTML = '';
-  
+
   const foldersPerPage = data.settings.folderRows === 1 ? 4 : FOLDERS_PER_PAGE;
   grid.classList.toggle('single-row', data.settings.folderRows === 1);
-  
+  grid.classList.toggle('auto-height', data.settings.folderScrollMode === 'auto');
+
+  // 폴더 추가 버튼을 하나의 슬롯으로 계산 (실제 폴더 + 추가 버튼)
+  const totalSlots = data.folders.length + 1;
+  const totalPages = Math.ceil(totalSlots / foldersPerPage);
+  const needsPagination = totalSlots > foldersPerPage;
+
   const startIndex = currentFolderPage * foldersPerPage;
   const endIndex = startIndex + foldersPerPage;
-  const pageFolders = data.folders.slice(startIndex, endIndex);
-  
+
+  // 현재 페이지에 표시할 폴더들
+  const pageFolders = data.folders.slice(startIndex, Math.min(endIndex, data.folders.length));
+
   pageFolders.forEach((folder, index) => {
     const card = createFolderElement(folder);
     card.dataset.index = startIndex + index;
     grid.appendChild(card);
   });
-  
-  if (pageFolders.length < foldersPerPage) {
+
+  // 폴더 추가 버튼: 현재 페이지에 슬롯이 남아있거나 마지막 페이지인 경우 표시
+  const foldersOnThisPage = pageFolders.length;
+  const addButtonIndex = data.folders.length;
+  const addButtonPage = Math.floor(addButtonIndex / foldersPerPage);
+
+  if (currentFolderPage === addButtonPage) {
     const addCard = document.createElement('div');
     addCard.className = 'folder-card folder-add';
     addCard.innerHTML = '<span class="add-icon">+</span><span class="add-text">폴더 추가</span>';
     addCard.addEventListener('click', () => openModal('add', 'folder'));
     grid.appendChild(addCard);
   }
-  
-  const totalPages = Math.ceil(data.folders.length / foldersPerPage);
-  const needsPagination = data.folders.length > foldersPerPage;
-  
+
   prevBtn.classList.toggle('hidden', !needsPagination);
   nextBtn.classList.toggle('hidden', !needsPagination);
   pageIndicator.classList.toggle('hidden', !needsPagination);
-  
+
   if (needsPagination) {
     prevBtn.disabled = currentFolderPage === 0;
     nextBtn.disabled = currentFolderPage >= totalPages - 1;
@@ -352,7 +371,8 @@ function setupEventListeners() {
   });
   
   document.getElementById('favNextBtn').addEventListener('click', () => {
-    const totalPages = Math.ceil(appData.favorites.length / FAVORITES_PER_PAGE);
+    const totalSlots = appData.favorites.length + 1; // 즐겨찾기 + 추가 버튼
+    const totalPages = Math.ceil(totalSlots / FAVORITES_PER_PAGE);
     if (currentFavoritePage < totalPages - 1) { currentFavoritePage++; renderFavorites(appData); }
   });
   
@@ -362,7 +382,8 @@ function setupEventListeners() {
   
   document.getElementById('folderNextBtn').addEventListener('click', () => {
     const foldersPerPage = appData.settings.folderRows === 1 ? 4 : FOLDERS_PER_PAGE;
-    const totalPages = Math.ceil(appData.folders.length / foldersPerPage);
+    const totalSlots = appData.folders.length + 1; // 폴더 + 추가 버튼
+    const totalPages = Math.ceil(totalSlots / foldersPerPage);
     if (currentFolderPage < totalPages - 1) { currentFolderPage++; renderFolders(appData); }
   });
   
@@ -475,12 +496,17 @@ function closeModal() {
 async function saveModalData() {
   const name = document.getElementById('nameInput').value.trim();
   const emoji = document.getElementById('emojiInput').value.trim();
-  const url = document.getElementById('urlInput').value.trim();
+  let url = document.getElementById('urlInput').value.trim();
   const memo = document.getElementById('memoInput').value.trim();
   const color = document.getElementById('colorTextInput').value.trim();
-  
+
   if (!name) { showToast('이름을 입력해주세요'); return; }
   if (modalType !== 'folder' && !url) { showToast('URL을 입력해주세요'); return; }
+
+  // URL에 프로토콜이 없으면 https:// 자동 추가
+  if (url && modalType !== 'folder') {
+    url = normalizeUrl(url);
+  }
   
   try {
     if (modalType === 'favorite') {
@@ -584,7 +610,14 @@ function setupSettingsEvents() {
     renderFolders(appData);
     showToast('설정이 변경되었습니다');
   });
-  
+
+  document.getElementById('folderScrollModeSelect').addEventListener('change', async (e) => {
+    const folderScrollMode = e.target.value;
+    appData = await saveSettings({ folderScrollMode });
+    applyFolderScrollMode(folderScrollMode);
+    showToast('설정이 변경되었습니다');
+  });
+
   document.getElementById('syncBtn').addEventListener('click', async () => {
     await forceSync();
     showToast('동기화 완료');
@@ -627,9 +660,14 @@ async function applyAndSaveBackground() {
   const type = document.getElementById('bgTypeSelect').value;
   const color = document.getElementById('bgColorText').value;
   const gradient = document.getElementById('bgGradientInput').value;
-  const imageUrl = document.getElementById('bgImageInput').value;
+  let imageUrl = document.getElementById('bgImageInput').value.trim();
   const opacity = parseFloat(document.getElementById('bgOpacitySlider').value);
-  
+
+  // 이미지 URL에 프로토콜이 없으면 https:// 자동 추가
+  if (imageUrl && type === 'image') {
+    imageUrl = normalizeUrl(imageUrl);
+  }
+
   const background = { type, color, gradient, imageUrl, opacity };
   applyBackground(background);
   appData = await saveBackground(background);
@@ -648,7 +686,8 @@ function updateSettingsUI() {
   document.getElementById('themeSelect').value = appData.settings.theme;
   document.getElementById('showFavoritesSelect').value = String(appData.settings.showFavorites);
   document.getElementById('folderRowsSelect').value = String(appData.settings.folderRows);
-  
+  document.getElementById('folderScrollModeSelect').value = appData.settings.folderScrollMode || 'fixed';
+
   // 배경 설정 UI (v1.1.0)
   const bg = appData.settings.background || {};
   document.getElementById('bgTypeSelect').value = bg.type || 'color';
@@ -688,6 +727,19 @@ function applyBackground(bg) {
 
 function updateFavoritesVisibility() {
   document.getElementById('favoritesSection').classList.toggle('hidden', !appData.settings.showFavorites);
+}
+
+function applyFolderScrollMode(mode) {
+  const foldersGrid = document.getElementById('foldersGrid');
+  if (!foldersGrid) return;
+
+  if (mode === 'auto') {
+    foldersGrid.classList.add('auto-height');
+    document.body.classList.remove('scroll-locked');
+  } else {
+    foldersGrid.classList.remove('auto-height');
+    document.body.classList.add('scroll-locked');
+  }
 }
 
 // ============================================
@@ -735,8 +787,9 @@ function handleArrowNavigation(key) {
   if (!keyboardNavActive) {
     // 첫 네비게이션 시작
     keyboardNavActive = true;
-    document.getElementById('keyboardHint').classList.remove('hidden');
-    
+    const hint = document.getElementById('keyboardHint');
+    if (hint) hint.classList.remove('hidden');
+
     if (appData.settings.showFavorites && appData.favorites.length > 0) {
       keyboardArea = 'favorites';
       keyboardFavIndex = 0;
@@ -829,8 +882,9 @@ function navigateSites(key) {
 }
 
 function updateKeyboardFocus() {
-  clearKeyboardFocus();
-  
+  // 이전 포커스만 제거 (상태는 유지)
+  document.querySelectorAll('.keyboard-focus').forEach(el => el.classList.remove('keyboard-focus'));
+
   if (keyboardArea === 'favorites') {
     const items = document.querySelectorAll('#favoritesGrid .favorite-item:not(.favorite-add)');
     if (items[keyboardFavIndex]) {
@@ -894,6 +948,15 @@ function scrollSearchResultIntoView() {
 // ============================================
 // 8. 유틸리티 함수
 // ============================================
+
+function normalizeUrl(url) {
+  // 이미 프로토콜이 있으면 그대로 반환
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(url)) {
+    return url;
+  }
+  // 프로토콜이 없으면 https:// 추가
+  return 'https://' + url;
+}
 
 function getFaviconUrl(url) {
   try {

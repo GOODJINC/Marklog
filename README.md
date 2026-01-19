@@ -3,7 +3,7 @@
 브라우저 새 탭을 대체하는 북마크 대시보드 확장 프로그램
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/version-1.1.0-green.svg)
+![Version](https://img.shields.io/badge/version-1.2.0-green.svg)
 ![Chrome](https://img.shields.io/badge/Chrome-supported-brightgreen.svg)
 ![Edge](https://img.shields.io/badge/Edge-supported-brightgreen.svg)
 
@@ -90,6 +90,7 @@ Marklog는 기존 브라우저 즐겨찾기의 불편함을 해소하기 위해 
 - 라이트/다크 테마
 - 즐겨찾기 표시 여부
 - 폴더 줄 수 (1줄/2줄)
+- **폴더 스크롤 모드** (v1.2.0): 고정 높이 또는 자동 높이 선택
 - 데이터 백업/복원
 
 ### ⌨️ 키보드 단축키

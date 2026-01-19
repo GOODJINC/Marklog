@@ -109,7 +109,7 @@
           <!-- URL (사이트/즐겨찾기용) -->
           <div id="urlField" class="form-field">
             <label for="urlInput">URL *</label>
-            <input type="url" id="urlInput" placeholder="https://example.com" />
+            <input type="text" id="urlInput" placeholder="example.com 또는 https://example.com" />
           </div>
 
           <!-- 메모 -->
@@ -168,7 +168,10 @@
     <div id="settingsPanel" class="settings-panel hidden">
       <div class="settings-backdrop"></div>
       <div class="settings-content">
-        <h2>설정</h2>
+        <div class="settings-header">
+          <h2>설정</h2>
+          <button id="settingsCloseBtn" class="settings-close-btn" aria-label="닫기">✕</button>
+        </div>
 
         <!-- 테마 -->
         <div class="settings-item">
@@ -253,9 +256,9 @@
         <div id="bgImageField" class="settings-item hidden">
           <label>이미지 URL</label>
           <input
-            type="url"
+            type="text"
             id="bgImageInput"
-            placeholder="https://example.com/image.jpg"
+            placeholder="example.com/image.jpg 또는 https://example.com/image.jpg"
           />
         </div>
 
@@ -290,6 +293,15 @@
           </select>
         </div>
 
+        <!-- 폴더 스크롤 모드 -->
+        <div class="settings-item">
+          <label>폴더 스크롤 모드</label>
+          <select id="folderScrollModeSelect">
+            <option value="fixed">고정 높이 (폴더 내부 스크롤)</option>
+            <option value="auto">자동 높이 (전체 스크롤)</option>
+          </select>
+        </div>
+
         <!-- 동기화 버튼 -->
         <div class="settings-item">
           <label>데이터 동기화</label>
@@ -305,11 +317,6 @@
           </div>
           <input type="file" id="importFile" accept=".json" class="hidden" />
         </div>
-
-        <!-- 닫기 버튼 -->
-        <button id="settingsCloseBtn" class="btn btn-secondary settings-close">
-          닫기
-        </button>
       </div>
     </div>
 
