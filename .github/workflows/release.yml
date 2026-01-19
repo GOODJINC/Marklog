@@ -1,0 +1,63 @@
+name: Release Chrome Extension
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'manifest.json'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Read version from manifest.json
+        id: get_version
+        run: |
+          # manifest.json에서 version 필드 추출
+          VERSION=$(jq -r .version manifest.json)
+          echo "Detected version: $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          git fetch --tags
+          if git rev-parse "v${{ env.VERSION }}" >/dev/null 2>&1; then
+            echo "Tag v${{ env.VERSION }} already exists. Skipping release."
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create ZIP file
+        if: steps.check_tag.outputs.exists == 'false'
+        run: |
+          # 배포에 필요한 파일만 명시적으로 포함 (화이트리스트 방식)
+          # 제외할 파일(.git, README 등)은 자동으로 빠지게 됩니다.
+          zip -r marklog-v${{ env.VERSION }}.zip \
+            manifest.json \
+            newtab.html \
+            newtab.css \
+            newtab.js \
+            _locales/ \
+            utils/ \
+            icons/
+
+      - name: Create Release
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: Release v${{ env.VERSION }}
+          files: marklog-v${{ env.VERSION }}.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
