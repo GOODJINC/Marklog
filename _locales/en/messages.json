@@ -1,10 +1,10 @@
 {
   "extName": {
-    "message": "Marklog",
+    "message": "Marklog - New Tab Bookmarks",
     "description": "Extension name"
   },
   "extDescription": {
-    "message": "Bookmark dashboard at a glance - View folders and sites on wide screens at once",
+    "message": "Bookmark dashboard for new tab - View all folders and sites at a glance",
     "description": "Extension description"
   },
   "searchPlaceholder": {
